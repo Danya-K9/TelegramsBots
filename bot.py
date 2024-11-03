@@ -27,11 +27,18 @@ def start(message):
 @bot.message_handler(commands=['Admin'])
 def admin_command(message):
     print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
-    if message.from_user.id == admin_id or message.from_user.id == admin_id1:
+    if message.from_user.id == admin_id:
         global files
         files = [file for file in os.listdir() if file.endswith(".txt")]  # Получаем список всех текстовых файлов в текущей директории
         files_list = "\n".join(files) if files else "Нет текстовых файлов в текущей директории."
         bot.send_message(admin_id, f"Список текстовых файлов:\n{files_list}")
+        print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
+    elif message.from_user.id == admin_id1:
+        #global files
+        files = [file for file in os.listdir() if
+                 file.endswith(".txt")]  # Получаем список всех текстовых файлов в текущей директории
+        files_list = "\n".join(files) if files else "Нет текстовых файлов в текущей директории."
+        bot.send_message(admin_id1, f"Список текстовых файлов:\n{files_list}")
         print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
     else:
         bot.send_message(message.chat.id, "У вас нет прав на выполнение этой команды.")
@@ -59,8 +66,12 @@ def process_file(message):
 @bot.message_handler(commands=['File'])
 def change_file_command(message):
     print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
-    if message.from_user.id == admin_id or message.from_user.id == admin_id1:
+    if message.from_user.id == admin_id:
         bot.send_message(admin_id, "Введите название файла, который вы хотите изменить:")
+        bot.register_next_step_handler(message, handle_file_input)
+        print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
+    elif message.from_user.id == admin_id1:
+        bot.send_message(admin_id1, "Введите название файла, который вы хотите изменить:")
         bot.register_next_step_handler(message, handle_file_input)
         print(f'Получено сообщение от пользователя {message.from_user.first_name}: {message.text}')
     else:
